@@ -1,8 +1,7 @@
 package com.microservice.hrworker.resources;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.microservice.hrworker.entities.Worker;
+import com.microservice.hrworker.repositories.WorkerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.microservice.hrworker.entities.Worker;
-import com.microservice.hrworker.repositories.WorkerRepository;
+import java.util.List;
 
 @RestController
 @RequestMapping("/workers")
@@ -35,8 +33,15 @@ public class WorkerResource {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Worker> findById(@PathVariable Long id){
+
+		try{
+			Thread.sleep(3000L);
+		}catch (InterruptedException ex){
+			ex.printStackTrace();
+		}
+
 		logger.info("PORT = " + env.getProperty("local.server.port"));
-		Optional<Worker> obj = repository.findById(id);
-		return ResponseEntity.ok(obj.get());
+		Worker obj = repository.findById(id).get();
+		return ResponseEntity.ok(obj);
 	}
 }
